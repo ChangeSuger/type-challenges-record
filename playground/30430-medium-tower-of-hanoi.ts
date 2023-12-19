@@ -11,4 +11,17 @@ type Tests = [
 
 
 // ============= Your Code Here =============
-type Hanoi<N extends number, From = 'A', To = 'B', Intermediate = 'C'> = any
+// https://github.com/type-challenges/type-challenges/issues/30479
+type Hanoi<
+  N extends number,
+  From = "A",
+  To = "B",
+  Intermediate = "C",
+  CurrentIndex extends 1[] = []
+> = CurrentIndex["length"] extends N
+  ? []
+  : [
+      ...Hanoi<N, From, Intermediate, To, [...CurrentIndex, 1]>, // 等价于 Hanoi<N-1, From, Intermediate, To, []>
+      [From, To], // 最底下一个移动到 To
+      ...Hanoi<N, Intermediate, To, From, [...CurrentIndex, 1]> // 等价于 Hanoi<N-1, Intermediate, To, From, []>
+    ]

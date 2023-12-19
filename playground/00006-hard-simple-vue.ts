@@ -39,4 +39,10 @@ SimpleVue({
 
 
 // ============= Your Code Here =============
-declare function SimpleVue(options: any): any
+declare function SimpleVue<Data, Computed, Methods>(
+  options: {
+    data: (this: void) => Data,
+    computed: Computed & ThisType<Data>,
+    methods: Methods & ThisType<Data & { [k in keyof Computed]: Computed[k] extends () => infer R ? R : never } & Methods>
+  }
+): any
